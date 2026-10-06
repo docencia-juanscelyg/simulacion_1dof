@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="base" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:property name="PI" value="3.1415926535897931"/>
+
+  <!-- base XACRO -->
+  <xacro:macro name="base" params="prefix ">
+
+    <!-- BASE LINK -->
+    <link name="${prefix}base_link">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="5000"/>
+            <inertia ixx="0.000008611" ixy="0" ixz="0" iyy="0.000008611" iyz="0" izz="0.000008611"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find simulacion_1dof)/meshes/dae/base.dae" scale="1.0 1.0 1.0"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find simulacion_1dof)/meshes/dae/base.dae" scale="1.0 1.0 1.0"/>
+            </geometry>
+        </collision>
+    </link>
+  </xacro:macro>
+</robot>

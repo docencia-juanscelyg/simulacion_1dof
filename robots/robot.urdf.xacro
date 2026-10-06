@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="manipulador_1DoF" xmlns:xacro="http://wiki.ros.org/xacro">
+    <!-- includes -->
+    <xacro:include filename="$(find simulacion_1dof)/urdf/base.urdf.xacro"/>
+    <xacro:include filename="$(find simulacion_1dof)/urdf/brazo.urdf.xacro"/>
+
+    <!-- Propiedades -->
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    <xacro:property name="load" value="1"/>
+
+    <!-- argumentos -->
+    <xacro:arg name="robot_ns" default=""/>
+    <xacro:arg name="prefix" default=""/>
+
+    <!-- Robot Parts -->
+    <!-- Fixed joint to world -->
+    <link name="world"/>
+    <joint name="world_to_base" type="fixed">
+        <parent link="world"/>
+        <child link="$(arg prefix)base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Base -->
+    <xacro:base prefix="$(arg prefix)"/>
+    <!-- Wheels -->
+    <xacro:brazo prefix="$(arg prefix)" parent="base_link" load="${load}">
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    </xacro:brazo>
+
+    <!-- Gazebo ROS control plugins -->
+    <xacro:include filename="$(find simulacion_1dof)/urdf/ros2_control.urdf.xacro"/>
+    <xacro:arg name="config_controllers" default="$(find simulacion_1dof)/config/controllers.yaml"/>
+    <xacro:arg name="update_rate" default="20"/>
+    <xacro:ros2_control/>
+
+
+
+
+</robot>

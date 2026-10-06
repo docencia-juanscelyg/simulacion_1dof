@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot name="brazo" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- brazo XACRO -->
+  <xacro:macro name="brazo" params="prefix parent *origin load">
+
+    <!-- brazo -->
+    <joint name="${prefix}brazo_joint" type="continuous">
+        <xacro:insert_block name="origin" />
+        <parent link="${parent}"/>
+        <child link="${prefix}brazo_link"/>
+        <axis xyz="0 -1 0" rpy="0 0 0" />
+        <limit effort="5000" velocity="100"/>
+        <dynamics damping="0.05" friction="0.1"/>
+    </joint>
+
+    <link name="${prefix}brazo_link">
+        <inertial>
+            <origin xyz="0.15 0 0" rpy="0 0 0"/>
+            <mass value="0.075"/>
+            <inertia ixx="0.000008611" ixy="0" ixz="0" iyy="0.00228770" iyz="0" izz="0.00228770"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.15 0 0" rpy="0 0 0"/>
+            <geometry>
+            <mesh filename="file://$(find simulacion_1dof)/meshes/dae/brazo.dae" scale="1.0 1.0 1.0"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.15 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find simulacion_1dof)/meshes/dae/brazo.dae" scale="1.0 1.0 1.0"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- load -->
+
+    <joint name="${prefix}load_joint" type="fixed">
+        <parent link="${prefix}brazo_link"/>
+        <child link="${prefix}load_link"/>
+        <origin xyz="0.3 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}load_link">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="${load}"/>
+            <inertia ixx="0.000008611" ixy="0" ixz="0" iyy="0.000008611" iyz="0" izz="0.000008611"/>
+        </inertial>
+    </link>
+
+    <!-- Transmission is important to link the joints and the controller (see config/controller.yaml)-->
+    <transmission name="${prefix}_brazo_joint_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${prefix}brazo_joint" >
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${prefix}brazo_joint_motor">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <gazebo reference="${prefix}brazo_link">
+        <mu1>0.05</mu1>
+        <mu2>0.1</mu2>
+        <!--kp>2.75e6</kp>
+        <kd>8.25e1</kd>
+        <fdir1>0 0 0</fdir1>
+        <maxContacts>4</maxContacts-->
+    </gazebo>
+  </xacro:macro>
+</robot>
