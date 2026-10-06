@@ -23,17 +23,18 @@ El paquete `simulacion_1dof` permite simular un brazo robótico simple con una a
 
 ```bash
 cd ~/tu_workspace/src
-# El paquete ya debe estar en simulacion_1dof/
+git clone https://github.com/docencia-juanscelyg/simulacion_1dof.git
 ```
 
 2. Compilar el paquete:
 
 ```bash
 cd ~/tu_workspace
-colcon build --packages-select simulacion_1dof
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --symlink-install
 ```
 
-3. Sourced el workspace:
+3. Source el workspace:
 
 ```bash
 source install/setup.bash
@@ -50,6 +51,7 @@ ros2 launch simulacion_1dof robot_gazebo.launch.py
 ```
 
 Esto iniciará:
+
 - Gazebo con el mundo vacío
 - RViz2 para visualización
 - Robot State Publisher
@@ -117,82 +119,31 @@ ros2 topic echo /joint_states
 ros2 control list_controllers
 ```
 
-## Estructura del Paquete
-
-```
-simulacion_1dof/
-├── README.md                      # Este archivo
-├── package.xml                    # Configuración del paquete
-├── CMakeLists.txt                 # Configuración de CMake
-├── config/
-│   ├── controllers.yaml           # Configuración de controladores
-│   └── bridge.yaml                # Configuración del puente ROS2-Gazebo
-├── launch/
-│   ├── robot_gazebo.launch.py     # Lanzar simulación completa
-│   ├── robot_controllers.launch.py # Cargar controladores
-│   ├── robot_state_publisher.launch.py # Publicar estado del robot
-│   └── robot_check_launch.py      # Verificación del robot
-├── robots/
-│   └── robot.urdf.xacro           # Descripción del robot principal
-├── urdf/
-│   ├── base.urdf.xacro            # Definición de la base
-│   ├── brazo.urdf.xacro           # Definición del brazo
-│   └── ros2_control.urdf.xacro    # Configuración de ros2_control
-├── meshes/                        # Archivos de geometría (si aplica)
-└── rviz/
-    └── robot.rviz                 # Configuración de visualización RViz2
-```
-
-## Parámetros de Configuración
-
-### Argumentos de Launch
-
-Los launchers aceptan los siguientes argumentos:
-
-- `use_sim_time`: (default: true) Usar tiempo de simulación
-- `prefix`: (default: "") Prefijo para los nombres de los links
-- `description_file`: (default: robot.urdf.xacro) Archivo URDF a cargar
-
-Ejemplo:
-```bash
-ros2 launch simulacion_1dof robot_state_publisher.launch.py prefix:=robot1_
-```
-
 ## Solución de Problemas
 
 ### El robot no aparece en Gazebo
+
 1. Verifica que el robot_state_publisher esté publicando correctamente:
+
    ```bash
    ros2 topic list | grep robot_description
    ```
-2. Verifica que el puente ROS2-Gazebo esté corriendo
+
+2. Verifica que el bridge ROS2-Gazebo esté en ejecución
 3. Revisa los logs de gazebo
 
 ### Los controladores no responden
+
 1. Verifica que los controladores estén cargados:
+
    ```bash
    ros2 control list_controllers
    ```
+
 2. Comprueba que el joint_state_broadcaster está activo
 3. Revisa la configuración en `config/controllers.yaml`
 
 ### RViz2 no muestra el robot
+
 1. Actualiza el fixed frame a "world" en RViz2
 2. Verifica que el robot_state_publisher esté publicando los transforms
-
-## Dependencias Principales
-
-- `robot_state_publisher`: Publica la cadena cinemática del robot
-- `joint_trajectory_controller`: Controlador de trayectorias
-- `ros_gz_sim`: Simulador Gazebo integrado con ROS2
-- `ros_gz_bridge`: Puente de comunicación ROS2-Gazebo
-- `rviz2`: Herramienta de visualización
-- `xacro`: Procesador de archivos URDF
-
-## Licencia
-
-GPL-3.0-only
-
-## Autor
-
-Juan S. Cely G. (juanscelyg@gmail.com)
