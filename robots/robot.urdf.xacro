@@ -13,13 +13,6 @@
     <xacro:arg name="prefix" default=""/>
 
     <!-- Robot Parts -->
-    <!-- Fixed joint to world -->
-    <link name="world"/>
-    <joint name="world_to_base" type="fixed">
-        <parent link="world"/>
-        <child link="$(arg prefix)base_link"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>
 
     <!-- Base -->
     <xacro:base prefix="$(arg prefix)"/>

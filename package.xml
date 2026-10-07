@@ -18,11 +18,13 @@
   <depend>xacro</depend>
   
   <depend>joint_trajectory_controller</depend>
+  <depend>rqt_joint_trajectory_controller</depend>
   <depend>joint_state_broadcaster</depend>
   <depend>controller_manager</depend>
   
   <depend>ros_gz_sim</depend>
   <depend>ros_gz_bridge</depend>
+  <depend>gz_ros2_control</depend>
   <depend>rviz2</depend>
   <depend>std_msgs</depend>
   <depend>trajectory_msgs</depend>
