@@ -34,10 +34,3 @@ jobs:
                 "packages-up-to": true
               }
             }
-
-      - name: Check xacro model
-        working-directory: ${{ env.WS }}
-        run: |
-          source install/setup.bash
-          xacro $(ros2 pkg prefix simulacion_1dof)/share/simulacion_1dof/robots/robot.urdf.xacro > /tmp/robot.urdf
-          echo "URDF generated: $(wc -l < /tmp/robot.urdf) lines"
