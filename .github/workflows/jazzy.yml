@@ -15,7 +15,7 @@ jobs:
       image: ubuntu:noble
     env:
       ROS_DISTRO: jazzy
-      WS: /ros_ws
+      WS: __w
     steps:
       - name: Repo checkout
         uses: actions/checkout@v6
