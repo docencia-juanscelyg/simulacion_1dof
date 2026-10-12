@@ -6,6 +6,15 @@
   <!-- base XACRO -->
   <xacro:macro name="base" params="prefix ">
 
+ <!-- Fixed joint to world -->
+    <link name="world"/>
+
+    <joint name="world_to_base" type="fixed">
+        <parent link="world"/>
+        <child link="$(arg prefix)base_link"/>
+        <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    </joint>
+
     <!-- BASE LINK -->
     <link name="${prefix}base_link">
         <inertial>
